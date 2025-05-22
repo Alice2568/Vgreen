@@ -71,7 +71,7 @@ CREATE TABLE commande(
    Id_commande INT NOT NULL AUTO_INCREMENT,
    adresse_livraison VARCHAR(50),
    adresse_facturation VARCHAR(50),
-   date_archivage DATETIME,
+   date_archivage DATETIME DEFAULT CURRENT_TIMESTAMP(),
    paiement Bool,
    reduction VARCHAR(50),
    Id_client_particulier INT NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE livraison(
    Id_livraison INT NOT NULL AUTO_INCREMENT,
    adresse VARCHAR(50),
    quantite VARCHAR(50),
-   date_archivage DATETIME,
+   date_archivage DATETIME DEFAULT CURRENT_TIMESTAMP(),
    Id_commande INT NOT NULL,
    PRIMARY KEY(Id_livraison),
    FOREIGN KEY(Id_commande) REFERENCES commande(Id_commande)
