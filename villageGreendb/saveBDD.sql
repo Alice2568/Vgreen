@@ -17,6 +17,45 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Temporary table structure for view `Joint_p_f`
+--
+
+DROP TABLE IF EXISTS `Joint_p_f`;
+/*!50001 DROP VIEW IF EXISTS `Joint_p_f`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8mb4;
+/*!50001 CREATE VIEW `Joint_p_f` AS SELECT
+ 1 AS `Id_Produit`,
+  1 AS `Nom`,
+  1 AS `Ref_Fournisseur`,
+  1 AS `PrixHA`,
+  1 AS `PrixHt`,
+  1 AS `image`,
+  1 AS `Id_fournisseur`,
+  1 AS `Id_sous_rubrique` */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `Joint_p_r`
+--
+
+DROP TABLE IF EXISTS `Joint_p_r`;
+/*!50001 DROP VIEW IF EXISTS `Joint_p_r`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8mb4;
+/*!50001 CREATE VIEW `Joint_p_r` AS SELECT
+ 1 AS `Id_Produit`,
+  1 AS `Nom`,
+  1 AS `Ref_Fournisseur`,
+  1 AS `PrixHA`,
+  1 AS `PrixHt`,
+  1 AS `image`,
+  1 AS `Id_fournisseur`,
+  1 AS `Id_sous_rubrique`,
+  1 AS `Id_rubrique` */;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `Produit`
 --
 
@@ -38,7 +77,7 @@ CREATE TABLE `Produit` (
   KEY `Id_sous_rubrique` (`Id_sous_rubrique`),
   CONSTRAINT `Produit_ibfk_1` FOREIGN KEY (`Id_fournisseur`) REFERENCES `fournisseur` (`Id_fournisseur`),
   CONSTRAINT `Produit_ibfk_2` FOREIGN KEY (`Id_sous_rubrique`) REFERENCES `sous_rubrique` (`Id_sous_rubrique`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,65 +86,46 @@ CREATE TABLE `Produit` (
 
 LOCK TABLES `Produit` WRITE;
 /*!40000 ALTER TABLE `Produit` DISABLE KEYS */;
+INSERT INTO `Produit` VALUES
+(1,'Guitare acoustique','Guitare folk 6 cordes','YAM-GA-001',150.00,220.00,'guitare.jpg',1,1),
+(2,'Batterie électronique','Kit complet','YAM-DR-002',500.00,750.00,'batterie.jpg',1,2),
+(3,'Câble XLR','Câble 5m XLR','SHU-CB-003',10.00,15.00,'cable.jpg',3,3),
+(4,'Ampli guitare','Ampli 100W','FEN-AMP-004',200.00,300.00,'ampli.jpg',2,4);
 /*!40000 ALTER TABLE `Produit` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `client_Pro`
+-- Table structure for table `client`
 --
 
-DROP TABLE IF EXISTS `client_Pro`;
+DROP TABLE IF EXISTS `client`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `client_Pro` (
+CREATE TABLE `client` (
   `Id_client` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) DEFAULT NULL,
-  `adresse` varchar(50) DEFAULT NULL,
-  `mail` varchar(50) DEFAULT NULL,
-  `telephone` varchar(50) DEFAULT NULL,
-  `nom_commercial` varchar(50) DEFAULT NULL,
-  `coeff_taxe` decimal(5,2) DEFAULT NULL,
-  PRIMARY KEY (`Id_client`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `client_Pro`
---
-
-LOCK TABLES `client_Pro` WRITE;
-/*!40000 ALTER TABLE `client_Pro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `client_Pro` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `client_particulier`
---
-
-DROP TABLE IF EXISTS `client_particulier`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `client_particulier` (
-  `Id_client_particulier` int(11) NOT NULL AUTO_INCREMENT,
   `adresse` varchar(50) DEFAULT NULL,
   `mail` varchar(50) DEFAULT NULL,
   `telephone` varchar(50) DEFAULT NULL,
   `nom` varchar(50) DEFAULT NULL,
   `coeff_taxe` decimal(5,2) DEFAULT NULL,
-  `Id_commerciale_particulier` int(11) NOT NULL,
-  PRIMARY KEY (`Id_client_particulier`),
-  KEY `Id_commerciale_particulier` (`Id_commerciale_particulier`),
-  CONSTRAINT `client_particulier_ibfk_1` FOREIGN KEY (`Id_commerciale_particulier`) REFERENCES `commerciale_particulier` (`Id_commerciale_particulier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `Id_commerciale` int(11) NOT NULL,
+  `pro` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Id_client`),
+  KEY `Id_commerciale` (`Id_commerciale`),
+  CONSTRAINT `client_ibfk_1` FOREIGN KEY (`Id_commerciale`) REFERENCES `commerciale` (`Id_commerciale`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `client_particulier`
+-- Dumping data for table `client`
 --
 
-LOCK TABLES `client_particulier` WRITE;
-/*!40000 ALTER TABLE `client_particulier` DISABLE KEYS */;
-/*!40000 ALTER TABLE `client_particulier` ENABLE KEYS */;
+LOCK TABLES `client` WRITE;
+/*!40000 ALTER TABLE `client` DISABLE KEYS */;
+INSERT INTO `client` VALUES
+(1,'12 avenue des artistes','client1@mail.com','0612345678','Alice Mélodie',1.20,1,NULL),
+(2,'34 rue du son','client2@mail.com','0698765432','Bob Harmonie',1.20,2,NULL);
+/*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -119,17 +139,14 @@ CREATE TABLE `commande` (
   `Id_commande` int(11) NOT NULL AUTO_INCREMENT,
   `adresse_livraison` varchar(50) DEFAULT NULL,
   `adresse_facturation` varchar(50) DEFAULT NULL,
-  `date_archivage` datetime DEFAULT current_timestamp(),
+  `date_archivage` datetime DEFAULT CURRENT_TIMESTAMP(),
   `paiement` tinyint(1) DEFAULT NULL,
   `reduction` varchar(50) DEFAULT NULL,
-  `Id_client_particulier` int(11) NOT NULL,
-  `Id_client` int(11) NOT NULL,
+  `Id_client` int(11) DEFAULT NULL,
   PRIMARY KEY (`Id_commande`),
-  KEY `Id_client_particulier` (`Id_client_particulier`),
   KEY `Id_client` (`Id_client`),
-  CONSTRAINT `commande_ibfk_1` FOREIGN KEY (`Id_client_particulier`) REFERENCES `client_particulier` (`Id_client_particulier`),
-  CONSTRAINT `commande_ibfk_2` FOREIGN KEY (`Id_client`) REFERENCES `client_Pro` (`Id_client`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `Id_client` FOREIGN KEY (`Id_client`) REFERENCES `client` (`Id_client`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,30 +155,36 @@ CREATE TABLE `commande` (
 
 LOCK TABLES `commande` WRITE;
 /*!40000 ALTER TABLE `commande` DISABLE KEYS */;
+INSERT INTO `commande` VALUES
+(1,'12 avenue des artistes','12 avenue des artistes','2025-04-01 10:00:00',1,'Aucune',NULL),
+(2,'34 rue du son','34 rue du son','2025-04-02 11:30:00',0,'10%',NULL);
 /*!40000 ALTER TABLE `commande` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `commerciale_particulier`
+-- Table structure for table `commerciale`
 --
 
-DROP TABLE IF EXISTS `commerciale_particulier`;
+DROP TABLE IF EXISTS `commerciale`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `commerciale_particulier` (
-  `Id_commerciale_particulier` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `commerciale` (
+  `Id_commerciale` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`Id_commerciale_particulier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`Id_commerciale`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `commerciale_particulier`
+-- Dumping data for table `commerciale`
 --
 
-LOCK TABLES `commerciale_particulier` WRITE;
-/*!40000 ALTER TABLE `commerciale_particulier` DISABLE KEYS */;
-/*!40000 ALTER TABLE `commerciale_particulier` ENABLE KEYS */;
+LOCK TABLES `commerciale` WRITE;
+/*!40000 ALTER TABLE `commerciale` DISABLE KEYS */;
+INSERT INTO `commerciale` VALUES
+(1,'Jean Dupont'),
+(2,'Marie Claire');
+/*!40000 ALTER TABLE `commerciale` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -179,7 +202,7 @@ CREATE TABLE `contient` (
   KEY `Id_commande` (`Id_commande`),
   CONSTRAINT `contient_ibfk_1` FOREIGN KEY (`Id_Produit`) REFERENCES `Produit` (`Id_Produit`),
   CONSTRAINT `contient_ibfk_2` FOREIGN KEY (`Id_commande`) REFERENCES `commande` (`Id_commande`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,6 +211,11 @@ CREATE TABLE `contient` (
 
 LOCK TABLES `contient` WRITE;
 /*!40000 ALTER TABLE `contient` DISABLE KEYS */;
+INSERT INTO `contient` VALUES
+(1,1,1),
+(2,2,1),
+(3,1,2),
+(4,2,1);
 /*!40000 ALTER TABLE `contient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +230,7 @@ CREATE TABLE `fournisseur` (
   `Id_fournisseur` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Id_fournisseur`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,6 +239,10 @@ CREATE TABLE `fournisseur` (
 
 LOCK TABLES `fournisseur` WRITE;
 /*!40000 ALTER TABLE `fournisseur` DISABLE KEYS */;
+INSERT INTO `fournisseur` VALUES
+(1,'Yamaha'),
+(2,'Fender'),
+(3,'Shure');
 /*!40000 ALTER TABLE `fournisseur` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,12 +257,12 @@ CREATE TABLE `livraison` (
   `Id_livraison` int(11) NOT NULL AUTO_INCREMENT,
   `adresse` varchar(50) DEFAULT NULL,
   `quantite` varchar(50) DEFAULT NULL,
-  `date_archivage` datetime DEFAULT current_timestamp(),
+  `date_archivage` datetime DEFAULT CURRENT_TIMESTAMP(),
   `Id_commande` int(11) NOT NULL,
   PRIMARY KEY (`Id_livraison`),
   KEY `Id_commande` (`Id_commande`),
   CONSTRAINT `livraison_ibfk_1` FOREIGN KEY (`Id_commande`) REFERENCES `commande` (`Id_commande`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,6 +271,9 @@ CREATE TABLE `livraison` (
 
 LOCK TABLES `livraison` WRITE;
 /*!40000 ALTER TABLE `livraison` DISABLE KEYS */;
+INSERT INTO `livraison` VALUES
+(1,'12 avenue des artistes','1','2025-04-03 09:00:00',1),
+(2,'34 rue du son','2','2025-04-04 15:00:00',2);
 /*!40000 ALTER TABLE `livraison` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,7 +288,7 @@ CREATE TABLE `rubrique` (
   `Id_rubrique` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Id_rubrique`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -262,6 +297,10 @@ CREATE TABLE `rubrique` (
 
 LOCK TABLES `rubrique` WRITE;
 /*!40000 ALTER TABLE `rubrique` DISABLE KEYS */;
+INSERT INTO `rubrique` VALUES
+(1,'Instruments de musique'),
+(2,'Accessoires'),
+(3,'Sonorisation');
 /*!40000 ALTER TABLE `rubrique` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -279,7 +318,7 @@ CREATE TABLE `sous_rubrique` (
   PRIMARY KEY (`Id_sous_rubrique`),
   KEY `Id_rubrique` (`Id_rubrique`),
   CONSTRAINT `sous_rubrique_ibfk_1` FOREIGN KEY (`Id_rubrique`) REFERENCES `rubrique` (`Id_rubrique`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -288,8 +327,49 @@ CREATE TABLE `sous_rubrique` (
 
 LOCK TABLES `sous_rubrique` WRITE;
 /*!40000 ALTER TABLE `sous_rubrique` DISABLE KEYS */;
+INSERT INTO `sous_rubrique` VALUES
+(1,'Guitares',1),
+(2,'Batteries',1),
+(3,'Câbles audio',2),
+(4,'Amplis',3);
 /*!40000 ALTER TABLE `sous_rubrique` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `Joint_p_f`
+--
+
+/*!50001 DROP VIEW IF EXISTS `Joint_p_f`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`admin`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `Joint_p_f` AS select `p`.`Id_Produit` AS `Id_Produit`,`p`.`Nom` AS `Nom`,`p`.`Ref_Fournisseur` AS `Ref_Fournisseur`,`p`.`PrixHA` AS `PrixHA`,`p`.`PrixHt` AS `PrixHt`,`p`.`image` AS `image`,`p`.`Id_fournisseur` AS `Id_fournisseur`,`p`.`Id_sous_rubrique` AS `Id_sous_rubrique` from (`Produit` `p` join `fournisseur` `f` on(`f`.`Id_fournisseur` = `p`.`Id_fournisseur`)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `Joint_p_r`
+--
+
+/*!50001 DROP VIEW IF EXISTS `Joint_p_r`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`admin`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `Joint_p_r` AS select `p`.`Id_Produit` AS `Id_Produit`,`p`.`Nom` AS `Nom`,`p`.`Ref_Fournisseur` AS `Ref_Fournisseur`,`p`.`PrixHA` AS `PrixHA`,`p`.`PrixHt` AS `PrixHt`,`p`.`image` AS `image`,`p`.`Id_fournisseur` AS `Id_fournisseur`,`p`.`Id_sous_rubrique` AS `Id_sous_rubrique`,`r`.`Id_rubrique` AS `Id_rubrique` from ((`Produit` `p` join `sous_rubrique` `ss` on(`ss`.`Id_sous_rubrique` = `p`.`Id_sous_rubrique`)) join `rubrique` `r` on(`r`.`Id_rubrique` = `ss`.`Id_rubrique`)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -300,4 +380,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-22 13:55:29
+-- Dump completed on 2025-05-26 10:00:18

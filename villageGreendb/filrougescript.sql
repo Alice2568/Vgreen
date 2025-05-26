@@ -28,22 +28,23 @@ CREATE TABLE client_Pro(
    PRIMARY KEY(Id_client)
 );
 
-CREATE TABLE commerciale_particulier(
-   Id_commerciale_particulier INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE commerciale(
+   Id_commerciale INT NOT NULL AUTO_INCREMENT,
    nom VARCHAR(50),
-   PRIMARY KEY(Id_commerciale_particulier)
+   PRIMARY KEY(Id_commerciale)
 );
 
-CREATE TABLE client_particulier(
+CREATE TABLE client(
    Id_client_particulier INT NOT NULL AUTO_INCREMENT,
    adresse VARCHAR(50),
    mail VARCHAR(50),
    telephone VARCHAR(50),
    nom VARCHAR(50),
    coeff_taxe DECIMAL(5,2),
-   Id_commerciale_particulier INT NOT NULL,
-   PRIMARY KEY(Id_client_particulier),
-   FOREIGN KEY(Id_commerciale_particulier) REFERENCES commerciale_particulier(Id_commerciale_particulier)
+   pro BOOLEAN,
+   Id_commercialeINT NOT NULL,
+   PRIMARY KEY(Id_client),
+   FOREIGN KEY(Id_commerciale) REFERENCES commerciale(Id_commerciale)
 );
 
 CREATE TABLE fournisseur(
@@ -74,11 +75,9 @@ CREATE TABLE commande(
    date_archivage DATETIME DEFAULT CURRENT_TIMESTAMP(),
    paiement Bool,
    reduction VARCHAR(50),
-   Id_client_particulier INT NOT NULL,
    Id_client INT NOT NULL,
    PRIMARY KEY(Id_commande),
-   FOREIGN KEY(Id_client_particulier) REFERENCES client_particulier(Id_client_particulier),
-   FOREIGN KEY(Id_client) REFERENCES client_Pro(Id_client)
+   FOREIGN KEY(Id_client) REFERENCES client(Id_client)
 );
 
 CREATE TABLE livraison(
