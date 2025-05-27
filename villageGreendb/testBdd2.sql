@@ -51,6 +51,7 @@ CREATE TABLE produits (
     libelle_long TEXT,
     ref_fournisseur VARCHAR(100),
     prix_achat DECIMAL(10,2),
+    prix_ht DECIMAL(10,2),
     photo VARCHAR(255),
     stock INT,
     actif BOOLEAN DEFAULT TRUE,
