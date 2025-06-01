@@ -1,49 +1,106 @@
 USE VILLAGEGREEN;
 --requetes CA mois par mois pour une année selectionnée
 SELECT
-    YEAR(c.date_archivage) AS annee,
-    MONTH(c.date_archivage) AS mois,
-    SUM(p.PrixHt * ct.quantité) AS chiffre_affaires
+    YEAR(c.date_commande) AS annee,
+    MONTH(c.date_commande) AS mois,
+    SUM(lg.prix_unitaire * lg.quantite) AS chiffre_affaires
 FROM
-    commande c
+    commandes c
 JOIN
-    contient ct ON c.Id_commande = ct.Id_commande
-JOIN
-    Produit p ON ct.Id_Produit = p.Id_Produit
+    lignes_commande lg ON lg.id_commande = c.id_commande
 GROUP BY
-    YEAR(c.date_archivage),
-    MONTH(c.date_archivage)
+    YEAR(c.date_commande),
+    MONTH(c.date_commande)
 ORDER BY
     annee, mois;
 
+
 --requete CA pour un fournisseur
 SELECT
-    `Id_fournisseur`,
-    SUM(p.PrixHt * ct.quantité) AS chiffre_affaires
+    f.id_fournisseur,
+    SUM(lc.prix_unitaire * lc.quantite) AS chiffre_affaires
 FROM
-    commande c
+    fournisseurs f
 JOIN
-    contient ct ON c.Id_commande = ct.Id_commande
+    produits p ON f.id_fournisseur = p.id_fournisseur
 JOIN
-    Produit p ON ct.Id_Produit = p.Id_Produit
+    lignes_commande lc ON lc.id_produit = p.id_produit
 GROUP BY
-    `Id_fournisseur`
+    id_fournisseur
 ORDER BY
-   `Id_fournisseur` ;
+   id_fournisseur;
+
+
 --TOP 10 des produits les plus commandés pour une année sélectionnée(référence et nom du produit, quantité commandée, fournisseur)
-SELECT `Ref_Fournisseur`, `Nom`, `Id_fournisseur`, contient.quantité FROM Produit JOIN contient ON contient.Id_Produit = Produit.Id_Produit GROUP BY Nom ORDER BY contient.quantité DESC LIMIT 10;
+SELECT libelle_court, p.id_produit, p.ref_fournisseur, p.id_fournisseur, c.date_commande, SUM(lc.quantite) AS qte
+FROM 
+    produits p
+JOIN 
+    fournisseurs f ON f.id_fournisseur = p.id_fournisseur
+JOIN 
+    lignes_commande lc ON lc.id_produit = p.id_produit
+JOIN commandes c ON c.id_commande= lc.id_commande 
+WHERE YEAR(c.date_commande) = 2024
+GROUP BY 
+    libelle_court
+ORDER BY 
+    qte DESC LIMIT 10;
 --TOP 10 des produits les plus rémunérateurs pour une année sélectionnée (référence et nom du produit, marge, fournisseur)
-SELECT `Ref_Fournisseur`, `Nom`, `Id_fournisseur`, SUM(`PrixHt`-`PrixHA`) AS Marge FROM Produit JOIN contient ON contient.Id_Produit = Produit.Id_Produit GROUP BY `Nom` ORDER BY Marge DESC LIMIT 10;
+
+SELECT libelle_court, p.id_produit, p.ref_fournisseur, p.id_fournisseur, c.date_commande, SUM((lc.quantite*lc.prix_unitaire)-(lc.quantite*p.prix_achat)) AS marge
+FROM 
+    produits p
+JOIN 
+    fournisseurs f ON f.id_fournisseur = p.id_fournisseur
+JOIN 
+    lignes_commande lc ON lc.id_produit = p.id_produit
+JOIN commandes c ON c.id_commande= lc.id_commande 
+WHERE YEAR(c.date_commande) = 2024
+GROUP BY 
+    libelle_court
+ORDER BY 
+    marge DESC LIMIT 10;
+
+
 --Top 10 des clients en nombre de commandes ou chiffre d'affaires
 --commandes
-SELECT cl.nom, cl.Id_client, COUNT(c.Id_commande) AS nb_commande FROM commande c JOIN client cl ON cl.Id_client= c.Id_client GROUP BY cl.Id_client ORDER BY nb_commande DESC LIMIT 10;
+SELECT 
+    cl.nom, cl.id_client, COUNT(c.id_commande) AS nb_commande 
+FROM commandes c 
+JOIN clients cl ON cl.id_client= c.id_client 
+GROUP BY cl.id_client ORDER BY nb_commande DESC LIMIT 10;
 
 --CA
 
-SELECT *
-FROM contient JOIN commande c ON contient.Id_commande=c.Id_commande JOIN client cl ON cl.Id_client=c.Id_client JOIN Produit p ON p.Id_Produit= contient.Id_Produit LIMIT 10;
-  
+SELECT cl.nom, cl.id_client, SUM(p.prix_achat * lc.quantite) AS chiffre_affaires
+FROM
+    commandes c
+JOIN
+    clients cl ON cl.id_client = c.id_client
+JOIN 
+    lignes_commande lc ON lc.id_commande = c.id_commande
+JOIN
+    produits p ON lc.id_Produit = p.id_Produit
+GROUP BY cl.id_client ORDER BY chiffre_affaires DESC LIMIT 10;
+
 
 --Répartition du chiffre d'affaires par type de client
 
+SELECT cl.nom, cl.id_client, cl.type_client, SUM(p.prix_achat * lc.quantite) AS chiffre_affaires
+FROM
+    commandes c
+JOIN
+    clients cl ON cl.id_client = c.id_client
+JOIN 
+    lignes_commande lc ON lc.id_commande = c.id_commande
+JOIN
+    produits p ON lc.id_Produit = p.id_Produit
+GROUP BY cl.type_client ORDER BY chiffre_affaires DESC LIMIT 10;
+
 --Nombre de commandes en cours de livraison.
+
+SELECT COUNT(*) AS nb_commandes_en_cours
+FROM commandes c
+WHERE c.etat = 'en cours';
+
+

@@ -1,6 +1,13 @@
 --vues: jointure Produits -Fournisseurs
-CREATE VIEW Joint_p_f AS
-SELECT p.Id_Produit, p.Nom, p.Ref_Fournisseur, p.PrixHA, p.PrixHt, p.image, p.Id_fournisseur, p.Id_sous_rubrique FROM Produit p JOIN fournisseur f ON f.Id_fournisseur = p.Id_fournisseur ;
+CREATE VIEW Jointure_p_f AS
+SELECT 
+    p.id_produit, p.libelle_court, p.ref_fournisseur, p.prix_achat, p.photo, p.id_fournisseur, p.id_sousrubrique, f.nom, f.email, f.tel
+FROM produits p 
+JOIN fournisseurs f ON f.id_fournisseur = p.id_fournisseur ;
 --vues: Produits- Catégorie/Sous catégorie
-CREATE VIEW Joint_p_r AS
-SELECT p.Id_Produit, p.Nom, p.Ref_Fournisseur, p.PrixHA, p.PrixHt, p.image, p.Id_fournisseur, p.Id_sous_rubrique, r.Id_rubrique FROM Produit p JOIN sous_rubrique ss ON ss.Id_sous_rubrique = p.Id_sous_rubrique JOIN rubrique r ON r.Id_rubrique= ss.Id_rubrique ;
+CREATE VIEW Jointure_p_rub AS
+SELECT 
+    p.id_produit, p.libelle_court, p.ref_fournisseur, p.prix_achat, p.photo, p.id_fournisseur, p.id_sousrubrique, ss.nom AS nom_ssrubrique, r.nom AS nom_rubrique
+FROM produits p 
+JOIN sous_rubriques ss ON ss.id_sousrubrique = p.id_sousrubrique 
+JOIN rubriques r ON r.id_rubrique= ss.id_rubrique ;
